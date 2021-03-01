@@ -5,8 +5,25 @@
 #include <iostream>
 #include <unistd.h>
 
+bool hit_sphere(const point3& center, double radius, const ray& r) {
+    vec3 oc = r.origin() - center; // A - C
+    
+    // represents the quadratic equation a*x^2 + b*x + c = 0
+    auto a = dot(r.direction(), r.direction());
+    auto b = 2.0 * dot(oc, r.direction());
+    auto c = dot(oc, oc) - radius*radius;
+
+    // if < 0 then no solution, if = 0 then 1
+    auto discriminant = b*b - 4*a*c;
+    return (discriminant > 0);
+}
+
 // this is just a white-blue gradient -> a lerp
 color ray_color(const ray& r) {
+    // do sphere
+    if (hit_sphere(point3(0,0,-1), 0.5, r))
+        return color(1, 0.9, 0.1);
+
     // components are bounded between [-1, 1] -> perfect for a colour!
     vec3 unit_direction = unit_vector(r.direction());
     auto t = 0.25 * (unit_direction.y() + unit_direction.x() + 2.0); // bounded by [0, 1] now
@@ -42,13 +59,15 @@ int main() {
         for (int x = 0; x < image_width; x++) {
             auto u = double(x) / (image_width-1);
             auto v = double(y) / (image_height-1);
-            ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
+
+            auto direction = lower_left_corner + u*horizontal + v*vertical - origin;
+            ray r(origin, direction);
 
             color pixel_color = ray_color(r);
             write_color(std::cout, pixel_color);
         }
 
-        usleep(1000); // this helps show off the progress meter.
+        usleep(500); // this helps show off the progress meter.
     }
 
     std::cerr << "\nDone\n";
