@@ -14,6 +14,15 @@ public:
     double e[3];
 
 public:
+    inline static vec3 random() {
+        return vec3(random_double(), random_double(), random_double());
+    }
+
+    inline static vec3 random(double min, double max) {
+        return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+    }
+
+public:
     vec3() : e{0, 0, 0} {}
     vec3(double e0, double e1, double e2) : e{e0, e1, e2} {}
 
@@ -109,5 +118,19 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
+
+// ------------------------------------- //
+
+vec3 random_in_unit_sphere(bool is_uniform=true) {
+    // multiplying two random vectors helps make it closer to uniform.
+    if (!is_uniform)
+        return unit_vector(vec3::random(-1, 1) * vec3::random(-1, 1));
+
+    auto p = vec3::random(-1, 1);
+    while(p.length_squared() >= 1)
+        p = vec3::random(-1, 1);
     
+    return p;
+}
+
 #endif
