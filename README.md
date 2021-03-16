@@ -15,3 +15,5 @@ I might add some cool things to this, who knows. Parsing of blender files would 
 - Making some psychadelic materials.
 - Animated materials!
 - Animated scenes?
+- Pixelated shaders (like with celeste) or shaders with small objects-fragments in them.
+- 

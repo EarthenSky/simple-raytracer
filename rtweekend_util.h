@@ -35,8 +35,9 @@ inline double clamp(double x, double min, double max) {
 // RNG Functions
 
 inline double random_double() {
+    static const int SEED = 123;
     static std::uniform_real_distribution<double> distribution(0.0, 1.0);
-    static std::mt19937 generator;
+    static std::mt19937 generator (SEED);
     return distribution(generator);
 }
 

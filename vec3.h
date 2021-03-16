@@ -121,16 +121,22 @@ inline vec3 unit_vector(vec3 v) {
 
 // ------------------------------------- //
 
-vec3 random_in_unit_sphere(bool is_uniform=true) {
+vec3 non_uniform_random_in_unit_sphere() {
     // multiplying two random vectors helps make it closer to uniform.
-    if (!is_uniform)
-        return unit_vector(vec3::random(-1, 1) * vec3::random(-1, 1));
+    return unit_vector(vec3::random(-1, 1) * vec3::random(-1, 1));
+}
 
+// doesn't need inline?
+vec3 random_in_unit_sphere() {
     auto p = vec3::random(-1, 1);
     while(p.length_squared() >= 1)
         p = vec3::random(-1, 1);
     
     return p;
+}
+
+vec3 random_unit_vector() {
+    return unit_vector(random_in_unit_sphere());
 }
 
 #endif
