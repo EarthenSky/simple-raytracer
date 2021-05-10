@@ -4,6 +4,7 @@
 #include "color.h"
 #include "hittable_list.h"
 #include "sphere.h"
+#include "material.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -17,8 +18,11 @@ color ray_color(const ray& r, const hittable& world, int depth) {
         return color(0,0,0);
     
     if (world.hit(r, 0.001, infinity, rec)) {
-        point3 target = rec.p + rec.normal + random_unit_vector(); // random_in_hemisphere(rec.normal);
-        return 0.5 * ray_color(ray(rec.p, target - rec.p), world, depth-1);
+        ray scattered;
+        color attenuation;
+        if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+            return attenuation * ray_color(scattered, world, depth-1);
+        return color(0,0,0);
     }
 
     // components are bounded between [-1, 1] -> perfect for a colour!
@@ -34,15 +38,23 @@ int main() {
     const auto aspect_ratio = 16.0 / 9.0;
     const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 100;
+    const int samples_per_pixel = 200;
     const int max_depth = 50;
 
 
     // World
 
     hittable_list world;
-    world.add(make_shared<sphere>(point3(0, 0, -1), 0.5)); // target sphere
-    world.add(make_shared<sphere>(point3(0, -100.5, -1), 100)); // ground
+    auto material_center = make_shared<lambertian>(color(1.0, 0.3, 0.3));
+    auto material_ground = make_shared<lambertian>(color(0.3, 0.8, 0.4));
+    auto material_left   = make_shared<metal>(color(0.2, 0.4, 1.0), 0.025);
+    auto material_right  = make_shared<metal>(color(0.9, 0.9, 0.9), 1.0);
+
+    world.add(make_shared<sphere>(point3(0, 0, -1.6), 0.5, material_center)); // target sphere
+    world.add(make_shared<sphere>(point3(0, -100.5, -1.0), 100, material_ground)); // ground
+    world.add(make_shared<sphere>(point3(-0.75, 0, -1.15), 0.35, material_left));
+    world.add(make_shared<sphere>(point3( 0.75, 0, -1.15), 0.35, material_right));
+
 
     // Camera
 

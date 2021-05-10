@@ -63,6 +63,13 @@ public:
     double length() const {
         return sqrt(length_squared());
     }
+
+    bool near_zero() const {
+        // Return true if the vector is close to zero in all dimensions.
+        const auto s = 1e-8; // this is a constant we should probably make configurable.
+        return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
+    }
+
 };
 
 // Type aliases for vec3
@@ -86,6 +93,7 @@ inline vec3 operator-(const vec3 &u, const vec3 &v) {
     return vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
 }
 
+// piecewise multiplication
 inline vec3 operator*(const vec3 &u, const vec3 &v) {
     return vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
 }
@@ -117,6 +125,10 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 // this could be a class function?
 inline vec3 unit_vector(vec3 v) {
     return v / v.length();
+}
+
+inline vec3 reflect(const vec3& v, const vec3& n) {
+    return v - 2*dot(v,n)*n; // 2 * unit_vector(n) - v;
 }
 
 // ------------------------------------- //
