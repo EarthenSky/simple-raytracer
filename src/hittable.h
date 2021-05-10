@@ -2,10 +2,14 @@
 #define HITTABLE_H
 
 #include "ray.h"
+#include "rtweekend_util.h"
+
+class material;
 
 struct hit_record {
     point3 p; // hit point
     vec3 normal;
+    shared_ptr<material> mat_ptr;
     double t;
     bool front_face; // is this hit on the front or back of a face.
 

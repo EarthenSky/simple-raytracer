@@ -8,10 +8,12 @@ class sphere : public hittable {
 public:
     point3 center;
     double radius;
+    shared_ptr<material> mat_ptr;
 
 public:
     sphere() {}
-    sphere(point3 cen, double r) : center(cen), radius(r) {};
+    sphere(point3 cen, double r, shared_ptr<material> m) 
+        : center(cen), radius(r), mat_ptr(m) {};
 
     // This virtual is telling us that this function is technically virtual, no
     // matter what we do.
@@ -44,6 +46,7 @@ bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
     // the hit point has magnitude = radius.
     vec3 outward_normal = (rec.p - center) / radius; //rec.normal = (rec.p - center) / radius;  
     rec.set_face_normal(r, outward_normal);
+    rec.mat_ptr = mat_ptr;
 
     return true;
 }
