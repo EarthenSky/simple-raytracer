@@ -1,3 +1,6 @@
+# DEPRECATED
+ reimplemented in zig -> /isos_render
+
 # simple-raytracer
  Simple c++ raytracer
 
