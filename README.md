@@ -1,3 +1,6 @@
+# DEPRECATED
+ reimplemented in zig -> /isos_render
+
 # simple-raytracer
  Simple c++ raytracer
 
@@ -7,7 +10,7 @@ I might add some cool things to this, who knows. Parsing of blender files would 
 
 # TODO List:
 - implement build2 -> https://build2.org/
-- 
+-
 
 # Ideas:
 - Don't raytrace evenly, instead interpolating colour & raytracing more densely around close objects & objects of interest. Steps: 1. get a realtime renderer looking at a scene with a low definition camera.  2. expand the pixel-definition of the view and allocate a certain number of traces each cycle & distribute them to pixels. (ordered using a weighted quad-tree?) 3. distribute the pixels to parts of the screen based on which objects are near & more detailed.
