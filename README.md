@@ -16,4 +16,4 @@ I might add some cool things to this, who knows. Parsing of blender files would 
 - Animated materials!
 - Animated scenes?
 - Pixelated shaders (like with celeste) or shaders with small objects-fragments in them.
-- 
+- Objects with naturally non-straight lines via procedural noise and a unique seed for each object. In this way, even as time passes the shape will not change randomly, but change to a similar shape.
